@@ -58,6 +58,7 @@
 ```bash
 # 安装依赖
 npm install
+npm install lottie-web
 
 # 启动开发服务器
 npm run dev
@@ -180,6 +181,3 @@ mysql -u 用户名 -p finance_management < database/schema.sql
    - is_default: 是否为默认类别
    - created_at: 创建时间
 
-## 许可证
-
-MIT © 2025
