@@ -58,6 +58,7 @@
 ```bash
 # 安装依赖
 npm install
+npm install lottie-web
 
 # 启动开发服务器
 npm run dev
