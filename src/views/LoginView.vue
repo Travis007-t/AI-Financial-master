@@ -308,7 +308,7 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #1a1f35 0%, #2a3149 100%);
+  background: linear-gradient(135deg, #0f1b3a 0%, #1a237e 50%, #283593 100%);
   position: fixed;
   top: 0;
   left: 0;
@@ -317,9 +317,27 @@ html, body {
   overflow: hidden;
   margin: 0;
   padding: 0;
+  font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+/* 数字流动效果背景 */
 .login-container::before {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  top: -50%;
+  left: -50%;
+  background-image: 
+    linear-gradient(rgba(24, 144, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(24, 144, 255, 0.05) 1px, transparent 1px);
+  background-size: 30px 30px;
+  animation: flow 20s linear infinite;
+  z-index: 1;
+}
+
+/* 星星效果 */
+.login-container::after {
   content: '';
   position: absolute;
   width: 200%;
@@ -330,51 +348,28 @@ html, body {
     radial-gradient(2px 2px at 40px 60px, #fff 50%, rgba(0,0,0,0)),
     radial-gradient(2px 2px at 20px 50px, rgba(255,255,255,0.4) 50%, rgba(0,0,0,0)),
     radial-gradient(2px 2px at 30px 100px, rgba(255,255,255,0.6) 50%, rgba(0,0,0,0)),
-    radial-gradient(2px 2px at 40px 60px, rgba(255,255,255,0.5) 50%, rgba(0,0,0,0)),
-    radial-gradient(2px 2px at 110px 90px, rgba(255,255,255,0.4) 50%, rgba(0,0,0,0)),
-    radial-gradient(2px 2px at 190px 150px, rgba(255,255,255,0.3) 50%, rgba(0,0,0,0));
+    radial-gradient(2px 2px at 40px 60px, rgba(255,255,255,0.5) 50%, rgba(0,0,0,0));
   background-repeat: repeat;
   background-size: 200px 200px;
-  animation: stars 20s linear infinite;
-  opacity: 0.6;
+  animation: stars 30s linear infinite;
+  opacity: 0.4;
   z-index: 1;
-}
-
-.login-container::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  background: radial-gradient(circle at 50% 50%, 
-    rgba(26, 31, 53, 0) 0%, 
-    rgba(26, 31, 53, 0.4) 50%, 
-    rgba(26, 31, 53, 0.8) 100%);
-  z-index: 1;
-}
-
-@keyframes stars {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(-50%);
-  }
 }
 
 .login-box {
   width: 100%;
   max-width: 400px;
-  background: rgba(42, 49, 73, 0.3);
-  border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 24px;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
   padding: 40px;
   position: relative;
   z-index: 2;
   margin: 0 20px;
   backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  animation: boxAppear 0.6s ease-out;
 }
 
 .login-header {
@@ -383,8 +378,10 @@ html, body {
 }
 
 .login-header h1 {
-  font-size: 28px;
-  color: #fff;
+  font-size: 32px;
+  background: linear-gradient(135deg, #fff 0%, #e0e7ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   margin-bottom: 12px;
   font-weight: 600;
 }
@@ -396,6 +393,8 @@ html, body {
 
 .form-group {
   margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
 }
 
 .form-group label {
@@ -404,76 +403,129 @@ html, body {
   color: rgba(255, 255, 255, 0.9);
   margin-bottom: 8px;
   font-weight: 500;
+  transform: translateY(0);
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
 }
 
 input[type="text"],
 input[type="password"],
 input[type="email"] {
   width: 100%;
-  padding: 12px 16px;
-  font-size: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
+  padding: 14px 20px;
+  font-size: 15px;
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
   background: rgba(255, 255, 255, 0.05);
   color: #fff;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 1;
 }
 
 input[type="text"]:focus,
 input[type="password"]:focus,
 input[type="email"]:focus {
-  border-color: rgba(24, 144, 255, 0.5);
+  border-color: #60a5fa;
   outline: none;
-  box-shadow: 0 0 0 3px rgba(24, 144, 255, 0.1);
   background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 20px rgba(96, 165, 250, 0.2);
 }
 
-.has-error {
-  border-color: #ff4d4f !important;
+.form-group::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, #60a5fa, #3b82f6);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+  z-index: 0;
 }
 
-.error-message {
-  color: #ff4d4f;
-  font-size: 12px;
-  margin-top: 5px;
+.form-group:focus-within::after {
+  transform: scaleX(1);
 }
 
-.error-message.global {
-  text-align: center;
-  padding: 12px;
-  background: rgba(255, 77, 79, 0.1);
-  border: 1px solid rgba(255, 77, 79, 0.2);
-  border-radius: 8px;
-  margin-bottom: 24px;
-  color: #ff4d4f;
-  font-size: 14px;
+.form-group:focus-within label {
+  color: #60a5fa;
+  transform: translateY(-2px);
 }
 
 .submit-button {
   width: 100%;
-  padding: 14px;
-  background: #1890ff;
+  padding: 16px;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s ease;
-  margin-top: 10px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  letter-spacing: 0.5px;
+}
+
+.submit-button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
 }
 
 .submit-button:hover {
-  background: #40a9ff;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.2);
+  transform: translateY(-2px);
+  box-shadow: 
+    0 6px 20px rgba(59, 130, 246, 0.3),
+    0 2px 6px rgba(59, 130, 246, 0.2);
+}
+
+.submit-button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+.submit-button:active {
+  transform: translateY(1px);
 }
 
 .submit-button:disabled {
-  background: rgba(24, 144, 255, 0.5);
+  background: rgba(59, 130, 246, 0.5);
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
+}
+
+.error-message {
+  color: #f87171;
+  font-size: 13px;
+  margin-top: 6px;
+  transform: translateY(0);
+  opacity: 1;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.error-message.global {
+  text-align: center;
+  padding: 12px 16px;
+  background: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.2);
+  border-radius: 12px;
+  margin-bottom: 24px;
+  animation: shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
 }
 
 .form-footer {
@@ -484,14 +536,99 @@ input[type="email"]:focus {
 }
 
 .form-footer a {
-  color: #1890ff;
+  color: #60a5fa;
   text-decoration: none;
   font-weight: 500;
   margin-left: 4px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.form-footer a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: #60a5fa;
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
 }
 
 .form-footer a:hover {
-  text-decoration: underline;
+  color: #93c5fd;
+}
+
+.form-footer a:hover::after {
+  transform: scaleX(1);
+}
+
+@keyframes flow {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(-50%) rotate(5deg);
+  }
+}
+
+@keyframes stars {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes boxAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translateX(-1px);
+  }
+  20%, 80% {
+    transform: translateX(2px);
+  }
+  30%, 50%, 70% {
+    transform: translateX(-4px);
+  }
+  40%, 60% {
+    transform: translateX(4px);
+  }
+}
+
+/* 添加加载动画 */
+.loading {
+  position: relative;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: #fff;
+  animation: spin 0.8s linear infinite;
+  margin-left: 8px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* 侧边面板基础样式 */
