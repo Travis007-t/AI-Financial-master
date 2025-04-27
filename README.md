@@ -126,7 +126,7 @@ DB_PASSWORD=你的数据库密码
 3. 导入数据库结构：
 
 ```bash
-mysql -u 用户名 -p AI-FINANCIAL-MASTER < database/schema.sql
+mysql -u 用户名 -p finance_management < database/schema.sql
 ```
 
 ## 功能特点
