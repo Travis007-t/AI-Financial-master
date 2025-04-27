@@ -155,6 +155,15 @@ const handleRegister = async () => {
 
 <template>
   <div class="login-container">
+    <!-- 左侧品牌介绍面板 -->
+    <div class="side-panel left-panel">
+      <div class="brand-content">
+        <h2 class="brand-title">使用 -PayNex- 开启您的钱包之旅</h2>
+        <p class="brand-subtitle">智能掌控财富，AI钱包与您同行</p>
+      </div>
+    </div>
+
+    <!-- 中间登录框 -->
     <div class="login-box">
       <div class="login-header">
         <h1>{{ formMode === 'login' ? '欢迎回来' : '创建新账户' }}</h1>
@@ -260,6 +269,13 @@ const handleRegister = async () => {
         </p>
       </div>
     </div>
+
+    <!-- 右侧Logo面板 -->
+    <div class="side-panel right-panel">
+      <div class="logo-placeholder">
+        <div class="temp-logo">PayNex</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -292,7 +308,7 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #b21f1f 0%, #b21f1f 100%);
+  background: linear-gradient(135deg, #1a1f35 0%, #2a3149 100%);
   position: fixed;
   top: 0;
   left: 0;
@@ -310,23 +326,55 @@ html, body {
   height: 200%;
   top: -50%;
   left: -50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-  background-size: 30px 30px;
-  animation: move 8s linear infinite;
+  background-image: 
+    radial-gradient(2px 2px at 40px 60px, #fff 50%, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 20px 50px, rgba(255,255,255,0.4) 50%, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 30px 100px, rgba(255,255,255,0.6) 50%, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 40px 60px, rgba(255,255,255,0.5) 50%, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 110px 90px, rgba(255,255,255,0.4) 50%, rgba(0,0,0,0)),
+    radial-gradient(2px 2px at 190px 150px, rgba(255,255,255,0.3) 50%, rgba(0,0,0,0));
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  animation: stars 20s linear infinite;
+  opacity: 0.6;
   z-index: 1;
+}
+
+.login-container::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: radial-gradient(circle at 50% 50%, 
+    rgba(26, 31, 53, 0) 0%, 
+    rgba(26, 31, 53, 0.4) 50%, 
+    rgba(26, 31, 53, 0.8) 100%);
+  z-index: 1;
+}
+
+@keyframes stars {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(-50%);
+  }
 }
 
 .login-box {
   width: 100%;
   max-width: 400px;
-  background-color: rgba(255, 255, 255, 0.98);
+  background: rgba(42, 49, 73, 0.3);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   padding: 40px;
   position: relative;
   z-index: 2;
   margin: 0 20px;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .login-header {
@@ -336,13 +384,13 @@ html, body {
 
 .login-header h1 {
   font-size: 28px;
-  color: #333;
+  color: #fff;
   margin-bottom: 12px;
   font-weight: 600;
 }
 
 .login-header p {
-  color: #666;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 16px;
 }
 
@@ -353,7 +401,7 @@ html, body {
 .form-group label {
   display: block;
   font-size: 14px;
-  color: #333;
+  color: rgba(255, 255, 255, 0.9);
   margin-bottom: 8px;
   font-weight: 500;
 }
@@ -364,19 +412,20 @@ input[type="email"] {
   width: 100%;
   padding: 12px 16px;
   font-size: 14px;
-  border: 1px solid #e4e4e4;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
   transition: all 0.3s ease;
-  background: rgba(255, 255, 255, 0.9);
 }
 
 input[type="text"]:focus,
 input[type="password"]:focus,
 input[type="email"]:focus {
-  border-color: #1890ff;
+  border-color: rgba(24, 144, 255, 0.5);
   outline: none;
   box-shadow: 0 0 0 3px rgba(24, 144, 255, 0.1);
-  background: #fff;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .has-error {
@@ -392,8 +441,8 @@ input[type="email"]:focus {
 .error-message.global {
   text-align: center;
   padding: 12px;
-  background-color: #fff2f0;
-  border: 1px solid #ffccc7;
+  background: rgba(255, 77, 79, 0.1);
+  border: 1px solid rgba(255, 77, 79, 0.2);
   border-radius: 8px;
   margin-bottom: 24px;
   color: #ff4d4f;
@@ -403,7 +452,7 @@ input[type="email"]:focus {
 .submit-button {
   width: 100%;
   padding: 14px;
-  background-color: #1890ff;
+  background: #1890ff;
   color: white;
   border: none;
   border-radius: 8px;
@@ -415,13 +464,13 @@ input[type="email"]:focus {
 }
 
 .submit-button:hover {
-  background-color: #40a9ff;
+  background: #40a9ff;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(24, 144, 255, 0.2);
 }
 
 .submit-button:disabled {
-  background-color: #bae7ff;
+  background: rgba(24, 144, 255, 0.5);
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
@@ -430,7 +479,7 @@ input[type="email"]:focus {
 .form-footer {
   margin-top: 24px;
   text-align: center;
-  color: #666;
+  color: rgba(255, 255, 255, 0.7);
   font-size: 14px;
 }
 
@@ -445,24 +494,113 @@ input[type="email"]:focus {
   text-decoration: underline;
 }
 
-@keyframes gradient {
+/* 侧边面板基础样式 */
+.side-panel {
+  position: fixed;
+  height: 100vh;
+  width: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  padding: 40px;
+  background: transparent;
+}
+
+/* 左侧面板 */
+.left-panel {
+  left: 15%;
+  opacity: 0;
+  transform: translateX(-50px);
+  animation: slideInLeft 1s ease-out forwards;
+  animation-delay: 0.5s;
+}
+
+/* 右侧面板 */
+.right-panel {
+  right: 15%;
+  opacity: 0;
+  transform: translateX(50px);
+  animation: slideInRight 1s ease-out forwards;
+  animation-delay: 0.5s;
+}
+
+/* 品牌内容样式 */
+.brand-content {
+  text-align: left;
+}
+
+.brand-title {
+  font-size: 2.5em;
+  font-weight: 600;
+  margin-bottom: 20px;
+  line-height: 1.3;
+  color: #fff;
+  white-space: pre-line;
+}
+
+.brand-subtitle {
+  font-size: 1.2em;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+}
+
+/* Logo占位样式 */
+.logo-placeholder {
+  text-align: center;
+}
+
+.temp-logo {
+  font-size: 3em;
+  font-weight: bold;
+  color: white;
+}
+
+/* 动画关键帧 */
+@keyframes slideInLeft {
   0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
+    opacity: 0;
+    transform: translateX(-50px);
   }
   100% {
-    background-position: 0% 50%;
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 
-@keyframes move {
+@keyframes slideInRight {
   0% {
-    transform: translate(0, 0);
+    opacity: 0;
+    transform: translateX(50px);
   }
   100% {
-    transform: translate(-50%, -50%);
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* 响应式布局调整 */
+@media (max-width: 1600px) {
+  .left-panel {
+    left: 10%;
+  }
+  .right-panel {
+    right: 10%;
+  }
+}
+
+@media (max-width: 1400px) {
+  .left-panel {
+    left: 5%;
+  }
+  .right-panel {
+    right: 5%;
+  }
+}
+
+@media (max-width: 1200px) {
+  .side-panel {
+    display: none;
   }
 }
 </style> 

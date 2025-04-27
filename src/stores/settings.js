@@ -6,7 +6,7 @@ export const useSettingsStore = defineStore('settings', {
     settings: {
       currency: '¥',
       theme: 'light',
-      userName: '用户',
+      userName: localStorage.getItem('userName') || '用户',
       isLoggedIn: false
     },
     isLoading: false,
@@ -70,6 +70,7 @@ export const useSettingsStore = defineStore('settings', {
     login(userName) {
       this.settings.userName = userName;
       this.settings.isLoggedIn = true;
+      localStorage.setItem('userName', userName);
     },
     
     // 登出
@@ -83,8 +84,9 @@ export const useSettingsStore = defineStore('settings', {
         console.error('登出API调用错误:', error);
       }
       
-      // 清除token
+      // 清除token和用户名
       localStorage.removeItem('token');
+      localStorage.removeItem('userName');
       
       // 重置状态
       this.settings = {
