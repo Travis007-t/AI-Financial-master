@@ -66,8 +66,26 @@ onMounted(() => {
     <!-- 在非登录页面显示侧边栏 -->
     <aside class="sidebar" v-if="!isLoginPage">
       <div class="brand">
-        <span class="logo">💰</span>
-        <h1>财务管理系统</h1>
+        <div class="brand-logo">
+          <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="sidebar-logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#60A5FA" />
+                <stop offset="100%" style="stop-color:#3B82F6" />
+              </linearGradient>
+              <filter id="sidebar-glow">
+                <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            <path class="logo-hexagon" d="M50 10L85 30V70L50 90L15 70V30L50 10Z" fill="none" stroke="url(#sidebar-logo-gradient)" stroke-width="2"/>
+            <path class="logo-letter" d="M40 35H60C65 35 70 40 70 45C70 50 65 55 60 55H40V35Z M40 35V65" fill="none" stroke="url(#sidebar-logo-gradient)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="brand-text">PayNex</div>
       </div>
       
       <nav class="nav-menu">
@@ -85,7 +103,7 @@ onMounted(() => {
         </RouterLink>
       </nav>
       
-      <div class="user-info">
+      <div class="user-info" @click="router.push('/settings')" role="button" tabindex="0">
         <div class="avatar">{{ settingsStore.getUserName.slice(0, 1).toUpperCase() }}</div>
         <div class="user-details">
           <div class="username">{{ settingsStore.getUserName }}</div>
@@ -246,22 +264,60 @@ body {
   height: 64px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  gap: 12px;
   background-color: rgba(0, 0, 0, 0.2);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.logo {
-  font-size: 24px;
-  margin-right: 12px;
+.brand-logo {
+  width: 32px;
+  height: 32px;
+  position: relative;
 }
 
-.brand h1 {
-  font-size: 18px;
+.logo-svg {
+  width: 100%;
+  height: 100%;
+  filter: url(#sidebar-glow);
+}
+
+.logo-hexagon {
+  animation: rotate 20s linear infinite;
+  transform-origin: center;
+  opacity: 0.9;
+}
+
+.logo-letter {
+  animation: dash 3s ease-in-out infinite alternate;
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+}
+
+.brand-text {
+  font-size: 20px;
   font-weight: 600;
-  color: white;
-  margin: 0;
+  background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   letter-spacing: 0.5px;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  from {
+    stroke-dashoffset: 300;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
 }
 
 .nav-menu {
@@ -332,6 +388,22 @@ body {
   margin: 8px;
   background-color: rgba(0, 0, 0, 0.15);
   border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.user-info:hover {
+  background-color: rgba(0, 0, 0, 0.25);
+  transform: translateY(-2px);
+}
+
+.user-info:active {
+  transform: translateY(0);
+}
+
+.user-info:focus-visible {
+  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.5);
 }
 
 .avatar {
@@ -402,11 +474,7 @@ body {
     width: 80px;
   }
   
-  .brand h1 {
-    display: none;
-  }
-  
-  .nav-text {
+  .brand-text {
     display: none;
   }
   

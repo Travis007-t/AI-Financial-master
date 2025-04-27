@@ -328,8 +328,33 @@ onMounted(() => {
 
     <!-- 右侧Logo面板 -->
     <div class="side-panel right-panel">
-      <div class="logo-placeholder">
-        <div class="temp-logo">PayNex</div>
+      <div class="logo-container">
+        <div class="logo">
+          <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="logo-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#60A5FA" />
+                <stop offset="100%" style="stop-color:#3B82F6" />
+              </linearGradient>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            <!-- 六边形外框 -->
+            <path class="logo-hexagon" d="M50 10L85 30V70L50 90L15 70V30L50 10Z" fill="none" stroke="url(#logo-gradient)" stroke-width="2"/>
+            <!-- P字母 -->
+            <path class="logo-letter" d="M40 35H60C65 35 70 40 70 45C70 50 65 55 60 55H40V35Z M40 35V65" fill="none" stroke="url(#logo-gradient)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="pay">Pay</span>
+          <span class="nex">Nex</span>
+        </div>
+        <div class="logo-subtitle">AI Powered Finance</div>
       </div>
     </div>
   </div>
@@ -877,15 +902,98 @@ input[type="email"]:focus {
   line-height: 1.6;
 }
 
-/* Logo占位样式 */
-.logo-placeholder {
-  text-align: center;
+/* Logo容器样式 */
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
-.temp-logo {
+.logo {
+  width: 120px;
+  height: 120px;
+  position: relative;
+  transition: transform 0.5s ease;
+}
+
+.logo:hover {
+  transform: rotate3d(1, 1, 0, 15deg);
+}
+
+.logo-svg {
+  width: 100%;
+  height: 100%;
+  filter: url(#glow);
+}
+
+.logo-hexagon {
+  animation: rotate 20s linear infinite;
+  transform-origin: center;
+  opacity: 0.9;
+}
+
+.logo-letter {
+  animation: dash 3s ease-in-out infinite alternate;
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+}
+
+.logo-text {
   font-size: 3em;
-  font-weight: bold;
-  color: white;
+  font-weight: 800;
+  letter-spacing: -1px;
+  background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+  animation: float 6s ease-in-out infinite;
+}
+
+.logo-subtitle {
+  font-size: 1.2em;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  from {
+    stroke-dashoffset: 300;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 /* 动画关键帧 */

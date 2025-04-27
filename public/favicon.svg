@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="32" height="32" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="favicon-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#60A5FA" />
+      <stop offset="100%" style="stop-color:#3B82F6" />
+    </linearGradient>
+  </defs>
+  <!-- 六边形外框 -->
+  <path d="M50 10L85 30V70L50 90L15 70V30L50 10Z" fill="none" stroke="url(#favicon-gradient)" stroke-width="4"/>
+  <!-- P字母 -->
+  <path d="M40 35H60C65 35 70 40 70 45C70 50 65 55 60 55H40V35Z M40 35V65" fill="none" stroke="url(#favicon-gradient)" stroke-width="4" stroke-linecap="round"/>
+  
+  <style>
+    path {
+      stroke-width: 4;
+    }
+    @media (prefers-color-scheme: dark) {
+      path {
+        stroke: #60A5FA;
+      }
+    }
+    @media (prefers-color-scheme: light) {
+      path {
+        stroke: #3B82F6;
+      }
+    }
+  </style>
+</svg> 
