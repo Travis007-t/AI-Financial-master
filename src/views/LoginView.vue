@@ -1,11 +1,12 @@
 <script setup>
-import { ref, reactive } from 'vue'
+import { ref, reactive, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useSettingsStore } from '../stores/settings'
 import api from '../services/api'
 
 const router = useRouter()
 const settingsStore = useSettingsStore()
+const matrixCanvas = ref(null)
 
 const formMode = ref('login') 
 const isLoading = ref(false)
@@ -151,10 +152,65 @@ const handleRegister = async () => {
     isLoading.value = false
   }
 }
+
+// Matrix rain animation
+const initMatrix = () => {
+  const canvas = matrixCanvas.value
+  const ctx = canvas.getContext('2d')
+  
+  // Set canvas size
+  const resizeCanvas = () => {
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+  }
+  
+  resizeCanvas()
+  window.addEventListener('resize', resizeCanvas)
+  
+  // Matrix characters
+  const chars = '0123456789ABCDEF智能钱包区块链PayNexAI量化投资'
+  const fontSize = 14
+  const columns = canvas.width / fontSize
+  const drops = Array(Math.floor(columns)).fill(1)
+  
+  ctx.font = fontSize + 'px monospace'
+  
+  const matrix = () => {
+    ctx.fillStyle = 'rgba(15, 27, 58, 0.05)' // 使用深色背景色
+    ctx.fillRect(0, 0, canvas.width, canvas.height)
+    
+    ctx.fillStyle = '#60a5fa' // 使用主题蓝色
+    
+    for (let i = 0; i < drops.length; i++) {
+      const text = chars[Math.floor(Math.random() * chars.length)]
+      ctx.fillText(text, i * fontSize, drops[i] * fontSize)
+      
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+        drops[i] = 0
+      }
+      drops[i]++
+    }
+  }
+  
+  const intervalId = setInterval(matrix, 34) // 约30fps
+  
+  // Cleanup
+  return () => {
+    clearInterval(intervalId)
+    window.removeEventListener('resize', resizeCanvas)
+  }
+}
+
+onMounted(() => {
+  const cleanup = initMatrix()
+  onUnmounted(cleanup)
+})
 </script>
 
 <template>
   <div class="login-container">
+    <canvas ref="matrixCanvas" class="matrix-background"></canvas>
+    <div class="gradient-orb"></div>
     <!-- 左侧品牌介绍面板 -->
     <div class="side-panel left-panel">
       <div class="brand-content">
@@ -320,42 +376,169 @@ html, body {
   font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
-/* 数字流动效果背景 */
+/* 数字雨背景 */
+.matrix-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  opacity: 0.5;
+}
+
+.matrix-background::before,
+.matrix-background::after {
+  content: '0 1 0 1 0 1 PayNex AI 智能 钱包 区块链 比特币 以太坊';
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  color: rgba(96, 165, 250, 0.3);
+  font-size: 1.2em;
+  line-height: 1;
+  letter-spacing: 0.15em;
+  white-space: break-spaces;
+  writing-mode: vertical-rl;
+  animation: matrix1 20s linear infinite;
+}
+
+.matrix-background::after {
+  content: '区块链 AI PayNex 0 1 智能 Crypto NFT DeFi 量化 投资';
+  animation: matrix2 15s linear infinite;
+  animation-delay: -10s;
+  left: 50%;
+  color: rgba(59, 130, 246, 0.2);
+}
+
+@keyframes matrix1 {
+  0% {
+    transform: translateY(-50%) translateX(-20%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(50%) translateX(20%);
+    opacity: 0;
+  }
+}
+
+@keyframes matrix2 {
+  0% {
+    transform: translateY(50%) translateX(20%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.3;
+  }
+  90% {
+    opacity: 0.3;
+  }
+  100% {
+    transform: translateY(-50%) translateX(-20%);
+    opacity: 0;
+  }
+}
+
+/* 动态光效背景 */
 .login-container::before {
   content: '';
   position: absolute;
-  width: 200%;
-  height: 200%;
-  top: -50%;
-  left: -50%;
-  background-image: 
-    linear-gradient(rgba(24, 144, 255, 0.05) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(24, 144, 255, 0.05) 1px, transparent 1px);
-  background-size: 30px 30px;
-  animation: flow 20s linear infinite;
+  width: 150vmax;
+  height: 150vmax;
+  top: -75vmax;
+  left: -75vmax;
+  background: radial-gradient(circle, 
+    rgba(96, 165, 250, 0.1) 0%,
+    rgba(59, 130, 246, 0.05) 30%,
+    rgba(29, 78, 216, 0.02) 60%,
+    transparent 100%
+  );
+  animation: orbitLight 20s linear infinite;
   z-index: 1;
+  mix-blend-mode: screen;
 }
 
-/* 星星效果 */
+/* 浮动粒子效果 */
 .login-container::after {
   content: '';
   position: absolute;
-  width: 200%;
-  height: 200%;
-  top: -50%;
-  left: -50%;
-  background-image: 
-    radial-gradient(2px 2px at 40px 60px, #fff 50%, rgba(0,0,0,0)),
-    radial-gradient(2px 2px at 20px 50px, rgba(255,255,255,0.4) 50%, rgba(0,0,0,0)),
-    radial-gradient(2px 2px at 30px 100px, rgba(255,255,255,0.6) 50%, rgba(0,0,0,0)),
-    radial-gradient(2px 2px at 40px 60px, rgba(255,255,255,0.5) 50%, rgba(0,0,0,0));
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(1.5px 1.5px at 50px 50px, rgba(255, 255, 255, 0.8) 50%, transparent 50%),
+    radial-gradient(1px 1px at 100px 150px, rgba(255, 255, 255, 0.6) 50%, transparent 50%),
+    radial-gradient(2px 2px at 200px 250px, rgba(255, 255, 255, 0.7) 50%, transparent 50%);
   background-repeat: repeat;
-  background-size: 200px 200px;
-  animation: stars 30s linear infinite;
-  opacity: 0.4;
+  background-size: 600px 600px;
+  animation: floatParticles 30s linear infinite;
+  opacity: 0.3;
   z-index: 1;
+  mix-blend-mode: screen;
 }
 
+.gradient-orb {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 30% 30%, 
+      rgba(99, 102, 241, 0.15) 0%,
+      rgba(99, 102, 241, 0.05) 30%,
+      transparent 70%
+    ),
+    radial-gradient(circle at 70% 70%, 
+      rgba(59, 130, 246, 0.15) 0%,
+      rgba(59, 130, 246, 0.05) 30%,
+      transparent 70%
+    );
+  filter: blur(30px);
+  animation: pulseGlow 10s ease-in-out infinite alternate;
+  z-index: 1;
+  mix-blend-mode: screen;
+}
+
+@keyframes orbitLight {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes floatParticles {
+  0% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-2%) translateX(1%);
+  }
+  100% {
+    transform: translateY(0) translateX(0);
+  }
+}
+
+@keyframes pulseGlow {
+  0% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+}
+
+/* 更新登录框样式以配合新背景 */
 .login-box {
   width: 100%;
   max-width: 400px;
@@ -363,13 +546,43 @@ html, body {
   border-radius: 24px;
   box-shadow: 
     0 8px 32px rgba(0, 0, 0, 0.2),
-    0 0 0 1px rgba(255, 255, 255, 0.1);
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 0 32px rgba(59, 130, 246, 0.05);
   padding: 40px;
   position: relative;
   z-index: 2;
   margin: 0 20px;
   backdrop-filter: blur(20px);
   animation: boxAppear 0.6s ease-out;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.login-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transform: skewX(-15deg);
+  animation: shimmer 8s infinite;
+  z-index: -1;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
 }
 
 .login-header {
@@ -562,24 +775,6 @@ input[type="email"]:focus {
 
 .form-footer a:hover::after {
   transform: scaleX(1);
-}
-
-@keyframes flow {
-  0% {
-    transform: translateY(0) rotate(0deg);
-  }
-  100% {
-    transform: translateY(-50%) rotate(5deg);
-  }
-}
-
-@keyframes stars {
-  0% {
-    transform: translateY(0);
-  }
-  100% {
-    transform: translateY(-50%);
-  }
 }
 
 @keyframes boxAppear {
