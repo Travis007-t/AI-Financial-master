@@ -25,7 +25,8 @@ const formData = ref({
 // 表单验证错误
 const errors = ref({
   category: '',
-  amount: ''
+  amount: '',
+  date: ''
 })
 
 // 获取收入和支出分类
@@ -66,7 +67,7 @@ watch(() => props.editing, (newValue) => {
 // 验证表单
 const validateForm = () => {
   let isValid = true
-  errors.value = { category: '', amount: '' }
+  errors.value = { category: '', amount: '', date: '' }
   
   if (!formData.value.category) {
     errors.value.category = '请选择类别'
@@ -80,7 +81,17 @@ const validateForm = () => {
     errors.value.amount = '请输入有效的金额'
     isValid = false
   }
-  
+
+  // 日期校验：不能晚于今天
+  const today = new Date()
+  today.setHours(0,0,0,0)
+  const inputDate = new Date(formData.value.date)
+  inputDate.setHours(0,0,0,0)
+  if (inputDate > today) {
+    errors.value.date = '日期不能晚于今天'
+    isValid = false
+  }
+
   return isValid
 }
 
@@ -181,7 +192,11 @@ const cancel = () => {
             id="date" 
             type="date" 
             v-model="formData.date"
+            :class="{ 'has-error': errors.date }"
           />
+          <div class="error-message" v-if="errors.date">
+            {{ errors.date }}
+          </div>
         </div>
         
         <div class="form-group">

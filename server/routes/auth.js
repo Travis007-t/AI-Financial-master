@@ -73,7 +73,9 @@ router.post('/login', async (req, res) => {
         message: '用户名和密码都是必填项'
       });
     }
-    
+
+    console.log('收到登录请求:', username, password);
+
     // 查找用户
     const [users] = await pool.query(
       'SELECT * FROM users WHERE username = ?',

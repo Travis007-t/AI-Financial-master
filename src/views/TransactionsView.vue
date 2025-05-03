@@ -53,18 +53,14 @@ const closeForm = () => {
 const saveTransaction = async (transaction) => {
   try {
     if (editingTransaction.value) {
-      // 编辑现有交易
       await transactionStore.updateTransaction(editingTransaction.value.id, {
         ...transaction,
         id: editingTransaction.value.id
       })
     } else {
-      // 添加新交易
       await transactionStore.addTransaction(transaction)
     }
-    // 刷新交易列表
     await transactionStore.fetchTransactions()
-    // 关闭表单
     closeForm()
   } catch (error) {
     console.error('保存交易失败:', error)
@@ -207,5 +203,45 @@ h1 {
 .page-button:hover:not(.active) {
   border-color: #1890ff;
   color: #1890ff;
+}
+
+@media (max-width: 768px) {
+  .transactions-view {
+    padding: 0 12px;
+  }
+  
+  .actions-bar {
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .search-filter {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .search-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 8px;
+  }
+  
+  .filter-select {
+    width: 100%;
+    padding: 10px;
+    font-size: 15px;
+    border-radius: 8px;
+  }
+  
+  .add-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+  }
 }
 </style> 

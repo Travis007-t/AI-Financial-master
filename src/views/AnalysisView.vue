@@ -9,6 +9,23 @@ import TrendChart from '../components/TrendChart.vue'
 const transactionStore = useTransactionStore()
 const settingsStore = useSettingsStore()
 
+// 加载状态
+const isLoading = ref(true)
+const error = ref(null)
+
+// 加载数据
+onMounted(async () => {
+  try {
+    await transactionStore.fetchTransactions()
+    isLoading.value = false
+  } catch (err) {
+    error.value = err.message || '加载数据失败'
+    console.error('加载数据失败:', err)
+  } finally {
+    isLoading.value = false
+  }
+})
+
 // 时间范围选项
 const timeRanges = [
   { label: '本月', value: 'current-month' },
@@ -115,6 +132,15 @@ const monthlyAverage = computed(() => {
   <div class="analysis-view">
     <h1>财务分析</h1>
     
+    <div v-if="isLoading" class="loading-state">
+      <p>加载中...</p>
+    </div>
+    
+    <div v-else-if="error" class="error-state">
+      <p>{{ error }}</p>
+    </div>
+    
+    <template v-else>
     <div class="time-range-selector">
       <span>时间范围：</span>
       <select v-model="selectedTimeRange">
@@ -124,6 +150,11 @@ const monthlyAverage = computed(() => {
       </select>
     </div>
     
+      <div v-if="filteredTransactions.length === 0" class="no-data">
+        <p>当前时间范围内暂无数据</p>
+      </div>
+      
+      <template v-else>
     <div class="stats-summary">
       <div class="stat-card">
         <h3>总收入</h3>
@@ -168,6 +199,8 @@ const monthlyAverage = computed(() => {
       <h2>收支趋势</h2>
       <TrendChart :transactions="filteredTransactions" :timeRange="selectedTimeRange" />
     </div>
+      </template>
+    </template>
   </div>
 </template>
 
@@ -259,5 +292,23 @@ h2 {
   .chart-container {
     grid-template-columns: 1fr;
   }
+}
+
+.loading-state,
+.error-state,
+.no-data {
+  text-align: center;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.error-state {
+  color: #dc3545;
+}
+
+.no-data {
+  color: #666;
 }
 </style> 

@@ -282,16 +282,71 @@ h2 {
 
 @media (max-width: 768px) {
   .dashboard {
-    padding: 0 10px;
-  }
-  
-  h1 {
-    font-size: 24px;
-  }
-  
-  .chart-wrapper, 
-  .recent-transactions-section {
     padding: 16px;
+    margin: -16px;
+    width: calc(100% + 32px);
+    padding-bottom: calc(65px + env(safe-area-inset-bottom));
+  }
+
+  h1 {
+    font-size: 22px;
+    margin-bottom: 20px;
+    padding: 0 16px;
+  }
+
+  .section {
+    margin-bottom: 16px;
+    background: var(--component-background);
+    border-radius: 16px;
+    padding: 16px;
+    margin: 0 -16px 16px -16px;
+    width: calc(100% + 32px);
+  }
+
+  .charts-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin: 0;
+  }
+
+  .chart-wrapper {
+    padding: 0;
+    min-height: 200px;
+    border-radius: 0;
+    box-shadow: none;
+    background: none;
+  }
+
+  .chart-wrapper:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .recent-transactions-section {
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+    background: none;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    padding: 0;
+  }
+
+  h2 {
+    font-size: 18px;
+    margin: 0;
+  }
+
+  .view-all {
+    font-size: 14px;
+    padding: 6px 12px;
+    background: rgba(24, 144, 255, 0.1);
+    border-radius: 20px;
   }
 }
 </style>

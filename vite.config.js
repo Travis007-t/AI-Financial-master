@@ -22,6 +22,16 @@ export default defineConfig(({ command, mode }) => {
         '@': fileURLToPath(new URL('./src', import.meta.url))
       },
     },
+    // 开发服务器配置
+    server: {
+      host: '0.0.0.0',
+      port: 5173,
+      cors: true,
+      strictPort: true,
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      }
+    },
     // 生产环境附加配置
     build: {
       // 分离CSS文件

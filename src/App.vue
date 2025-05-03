@@ -4,6 +4,7 @@ import { computed, watch, onMounted } from 'vue'
 import { useSettingsStore } from './stores/settings'
 import { useRouter, useRoute } from 'vue-router'
 import AIAssistant from './components/AIAssistant.vue'
+import MobileNav from './components/MobileNav.vue'
 
 const settingsStore = useSettingsStore()
 const router = useRouter()
@@ -116,13 +117,16 @@ onMounted(() => {
     </aside>
     
     <!-- 主内容 -->
-    <main class="main-content" :class="{ 'full-width': isLoginPage }">
+    <main class="main-content" :class="{ 'full-width': isLoginPage, 'has-mobile-nav': !isLoginPage }">
       <RouterView v-slot="{ Component }">
         <transition name="fade" mode="out-in">
           <component :is="Component" />
         </transition>
       </RouterView>
     </main>
+    
+    <!-- 移动端底部导航 -->
+    <MobileNav v-if="!isLoginPage" />
     
     <!-- AI 助手 -->
     <AIAssistant v-if="!isLoginPage" />
@@ -471,43 +475,21 @@ body {
 
 @media (max-width: 768px) {
   .sidebar {
-    width: 80px;
-  }
-  
-  .brand-text {
     display: none;
   }
   
-  .user-status {
-    display: none;
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    padding-bottom: 80px; /* 为底部导航留出空间 */
   }
   
-  .avatar {
-    margin-right: 0;
+  .main-content.has-mobile-nav {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom));
   }
   
-  .user-details {
-    display: none;
-  }
-  
-  .user-info {
-    justify-content: center;
-    padding: 12px;
-  }
-  
-  .nav-item {
-    justify-content: center;
-    padding: 0;
-  }
-  
-  .nav-icon-wrapper {
-    margin-right: 0;
-  }
-  
-  .main-content:not(.full-width) {
-    margin-left: 80px;
-    width: calc(100% - 80px);
-    padding: 20px;
+  .main-content.full-width {
+    padding-bottom: 0;
   }
 }
 </style>

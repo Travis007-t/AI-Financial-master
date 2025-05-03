@@ -18,7 +18,7 @@ export const useBudgetStore = defineStore('budget', {
     
     getBudgetProgress: (state) => {
       return (category) => {
-        const budget = state.getBudgetByCategory(category);
+        const budget = state.budgets.find(budget => budget.category === category);
         if (!budget) return null;
         
         const transactionStore = useTransactionStore();
@@ -26,7 +26,23 @@ export const useBudgetStore = defineStore('budget', {
         const currentMonth = currentDate.getMonth();
         const currentYear = currentDate.getFullYear();
         
-        const monthlyTransactions = transactionStore.getTransactionsByMonth(currentMonth, currentYear);
+        const startDate = new Date(currentYear, currentMonth, 1);
+        const endDate = new Date(currentYear, currentMonth + 1, 0);
+        
+        const monthlyTransactions = transactionStore.transactions.filter(t => {
+          const date = new Date(t.date);
+          return date >= startDate && date <= endDate;
+        });
+        
+        if (!monthlyTransactions || monthlyTransactions.length === 0) {
+          return {
+            spent: 0,
+            limit: parseFloat(budget.amount),
+            percentage: 0,
+            isOverBudget: false
+          };
+        }
+        
         const categoryExpenses = monthlyTransactions
           .filter(t => t.type === 'expense' && t.category === category)
           .reduce((sum, t) => sum + parseFloat(t.amount), 0);
@@ -42,16 +58,39 @@ export const useBudgetStore = defineStore('budget', {
     },
     
     getAllBudgetProgress: (state) => {
+      if (!state.budgets || state.budgets.length === 0) {
+        return [];
+      }
+      
       const result = [];
+      const transactionStore = useTransactionStore();
+      const currentDate = new Date();
+      const currentMonth = currentDate.getMonth();
+      const currentYear = currentDate.getFullYear();
+      
+      const startDate = new Date(currentYear, currentMonth, 1);
+      const endDate = new Date(currentYear, currentMonth + 1, 0);
+      
+      const monthlyTransactions = transactionStore.transactions.filter(t => {
+        const date = new Date(t.date);
+        return date >= startDate && date <= endDate;
+      });
+      
       state.budgets.forEach(budget => {
-        const progress = state.getBudgetProgress(budget.category);
-        if (progress) {
+        const categoryExpenses = monthlyTransactions
+          .filter(t => t.type === 'expense' && t.category === budget.category)
+          .reduce((sum, t) => sum + parseFloat(t.amount), 0);
+        
+        const percentage = (categoryExpenses / parseFloat(budget.amount)) * 100;
           result.push({
             category: budget.category,
-            ...progress
+          spent: categoryExpenses,
+          limit: parseFloat(budget.amount),
+          percentage: percentage,
+          isOverBudget: percentage > 100
           });
-        }
       });
+      
       return result;
     }
   },

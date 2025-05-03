@@ -61,7 +61,7 @@ export default {
   
   // AI 服务
   ai: {
-    chat: (message) => api.post('/ai/chat', { message })
+    chat: (data) => api.post('/ai/chat', data)
   },
   
   // 交易记录

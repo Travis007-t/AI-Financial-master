@@ -60,15 +60,15 @@ const deleteTransaction = (id) => {
       </thead>
       <tbody>
         <tr v-for="transaction in transactions" :key="transaction.id" class="transaction-row">
-          <td class="transaction-date">{{ formatDate(transaction.date) }}</td>
-          <td>
+          <td class="transaction-date" data-label="日期">{{ formatDate(transaction.date) }}</td>
+          <td data-label="类别">
             <span class="transaction-category" :class="transaction.type">
               {{ transaction.category }}
             </span>
           </td>
-          <td>{{ transaction.type === 'income' ? '收入' : '支出' }}</td>
-          <td class="transaction-note">{{ transaction.note }}</td>
-          <td class="transaction-amount" :class="transaction.type === 'income' ? 'positive' : 'negative'">
+          <td data-label="类型">{{ transaction.type === 'income' ? '收入' : '支出' }}</td>
+          <td class="transaction-note" data-label="备注">{{ transaction.note }}</td>
+          <td class="transaction-amount" data-label="金额" :class="transaction.type === 'income' ? 'positive' : 'negative'">
             {{ transaction.type === 'income' ? '+' : '-' }}{{ settingsStore.getCurrency }}{{ transaction.amount }}
           </td>
           <td v-if="!compact" class="actions">
@@ -212,9 +212,84 @@ const deleteTransaction = (id) => {
 }
 
 @media (max-width: 768px) {
-  .transaction-table th:nth-child(3),
-  .transaction-table td:nth-child(3) {
+  .transaction-list {
+    border-radius: 12px;
+    padding: 8px;
+  }
+
+  .transaction-table thead {
     display: none;
+  }
+
+  .transaction-table, 
+  .transaction-table tbody,
+  .transaction-table tr {
+    display: block;
+    width: 100%;
+  }
+
+  .transaction-row {
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    position: relative;
+  }
+
+  .transaction-row td {
+    display: flex;
+    align-items: center;
+    padding: 4px 0;
+    border: none;
+    font-size: 15px;
+  }
+
+  .transaction-row td::before {
+    content: attr(data-label);
+    width: 60px;
+    color: #888;
+    font-size: 13px;
+  }
+
+  .transaction-date {
+    font-size: 14px;
+    color: #666;
+  }
+
+  .transaction-category {
+    margin: 4px 0;
+    padding: 4px 12px;
+    font-size: 14px;
+    display: inline-block;
+  }
+
+  .transaction-amount {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 4px;
+  }
+
+  .transaction-note {
+    color: #666;
+    font-size: 14px;
+    word-break: break-all;
+    margin: 4px 0;
+  }
+
+  .actions {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #f0f0f0;
+    justify-content: flex-start;
+  }
+
+  .edit-button,
+  .delete-button {
+    padding: 8px 16px;
+    font-size: 14px;
   }
 }
 </style> 

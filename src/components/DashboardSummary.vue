@@ -179,23 +179,58 @@ const balanceClass = computed(() => {
 
 @media (max-width: 768px) {
   .dashboard-summary {
-    grid-template-columns: 1fr;
-    gap: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0 -12px;
+    margin-bottom: 16px;
   }
-  
+
   .summary-card {
-    padding: 20px;
+    margin: 0 12px;
+    padding: 14px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
   }
-  
+
   .card-icon {
-    font-size: 28px;
-    width: 56px;
-    height: 56px;
-    margin-right: 16px;
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    border-radius: 10px;
+    margin: 0;
   }
-  
+
+  .card-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .card-title {
+    font-size: 13px;
+    margin: 0;
+    opacity: 0.85;
+  }
+
   .card-value {
-    font-size: 24px;
+    font-size: 20px;
+    line-height: 1.2;
+  }
+
+  .income {
+    background: linear-gradient(to right, #42b983 0%, #33a06f 100%);
+  }
+
+  .expense {
+    background: linear-gradient(to right, #ff7875 0%, #ff4d4f 100%);
+  }
+
+  .balance {
+    background: linear-gradient(to right, #36cfc9 0%, #13c2c2 100%);
   }
 }
 </style> 

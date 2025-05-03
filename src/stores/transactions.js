@@ -26,15 +26,26 @@ export const useTransactionStore = defineStore('transactions', {
     },
     
     getNetBalance: (state) => {
-      return state.getTotalIncome - state.getTotalExpense;
+      const totalIncome = state.transactions
+        .filter(transaction => transaction.type === 'income')
+        .reduce((sum, transaction) => sum + parseFloat(transaction.amount), 0);
+      
+      const totalExpense = state.transactions
+        .filter(transaction => transaction.type === 'expense')
+        .reduce((sum, transaction) => sum + parseFloat(transaction.amount), 0);
+      
+      return totalIncome - totalExpense;
     },
     
     getTransactionsByMonth: (state) => {
       return (month, year) => {
+        const startDate = new Date(year, month, 1);
+        const endDate = new Date(year, month + 1, 0); // 当月最后一天
+        
         return state.transactions.filter(transaction => {
           if (!transaction.date) return false;
           const date = new Date(transaction.date);
-          return date.getMonth() === month && date.getFullYear() === year;
+          return date >= startDate && date <= endDate;
         });
       };
     },
